@@ -393,12 +393,12 @@ Es gilt: $\log(n) < \sqrt{n} < n < n\cdot \log(n) < n^2 < n! < 2^n<n^n$
 \begin{codeBlock}[autogobble]{title=insertionSort(A)}
     FOR i=1 TO A.length-1 DO
         // insert A[i] in pre-sorted sequence A[0..i-1]
-        key=A[i];
-        j=i-1; // search for insertion point backwards
+        key=A[i]
+        j=i-1 // search for insertion point backwards
         WHILE j>=0 AND A[j]>key DO
-            A[j+1]=A[j]; // move elements to right
-            j=j-1;
-        A[j+1]=key;
+            A[j+1]=A[j] // move elements to right
+            j=j-1
+        A[j+1]=key
 \end{codeBlock}
 %\end{noindent}
 
@@ -527,18 +527,18 @@ $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
     %\begin{noindent}
     \begin{codeBlock}[autogobble]{title={StringMatching(S,T,A)}}
         IF S.length < T.length
-            return [];                // No Match possible
+            return []                // No Match possible
         I=[]
         R=[]
         FOR i = 0 TO S.length
             FOR j = 0 TO I.length - 1
                 IF S[i] != T[i-I[j]]
-                    I.remove(I[j]);   // Valid Candidate
+                    I.remove(I[j])   // Valid Candidate
                 IF i-I[j] == T.length
-                    R.add[I[j]];      // Match Found
+                    R.add[I[j]]      // Match Found
             IF S[i] == T[0]
-                I.add(i);
-        return R;
+                I.add(i)
+        return R
     \end{codeBlock}
     %\end{noindent}
     \paragraph{Analyse von \texttt{String matching}}
@@ -658,24 +658,24 @@ $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
 %\begin{noindent}
 \begin{codeBlock}[autogobble,escapeinside=||]{title={mergeSort(A,left,right) // initial left=0,right=A.length-1}}
     IF left < right THEN // more than one element
-        mid=floor((left+right)/2); // middle (rounded down)
-        mergeSort(A,left,mid); // sort left part
-        mergeSort(A,mid+1,right); // sort right part
-        merge(A,left,mid,right); // merge into one
+        mid=floor((left+right)/2) // middle (rounded down)
+        mergeSort(A,left,mid) // sort left part
+        mergeSort(A,mid+1,right) // sort right part
+        merge(A,left,mid,right) // merge into one
 \end{codeBlock}
 
 \begin{codeBlock}[autogobble,escapeinside=||]{title={merge(A,left,mid,right)}}
         //temporary array B, right-left+1 elements
     
-    p=left; q=mid+1; // position left, right
+    p=left q=mid+1 // position left, right
     FOR i=0 TO right-left DO // merge all elements
         IF q>right OR (p=<mid AND A[p]=<A[q]) THEN
-            B[i]=A[p];
-            p=p+1;
+            B[i]=A[p]
+            p=p+1
         ELSE //next element at q
-            B[i]=A[q];
-            q=q+1;
-    FOR i=0 TO right-left DO A[i+left]=B[i]; //copy back
+            B[i]=A[q]
+            q=q+1
+    FOR i=0 TO right-left DO A[i+left]=B[i] //copy back
 \end{codeBlock}
 %\end{noindent}
 (Teilarrays werden nicht parallel bearbeitet)
@@ -767,17 +767,17 @@ Lösen der Rekursionsgleichung mithilfe eines Rekursionsbaums
 %\begin{noindent}
           \begin{codeBlock}[autogobble,escapeinside=||]{title={quicksort(A,left,right)} //initial left=0,right=A.length-1}
             IF left<right THEN //more than one element
-                q=partition(A,left,right); // q partition index
-                quicksort(A,left,q); // sort left part
-                quicksort(A,q+1,right); // sort right part
+                q=partition(A,left,right) // q partition index
+                quicksort(A,left,q) // sort left part
+                quicksort(A,q+1,right) // sort right part
           \end{codeBlock}
           \index{Partition}\begin{codeBlock}[autogobble,escapeinside=||]{title={partition(A,left,right)}  //req.left<right,ret.left..right-1}
-            pivot=A[left];
-            p=left-1; q=right+1; //move from left resp. right
+            pivot=A[left]
+            p=left-1 q=right+1 //move from left resp. right
             WHILE p<q DO
-                REPEAT p=p+1 UNTIL A[p]>=pivot; //left up
-                REPEAT q=q-1 UNTIL A[q]=<pivot; //right down
-                IF p<q THEN Swap(A[p],A[q]);
+                REPEAT p=p+1 UNTIL A[p]>=pivot //left up
+                REPEAT q=q-1 UNTIL A[q]=<pivot //right down
+                IF p<q THEN Swap(A[p],A[q])
             return q // A[left..q], A[q+1..right]
           \end{codeBlock}
           %\end{noindent}
