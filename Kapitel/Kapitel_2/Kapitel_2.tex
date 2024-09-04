@@ -390,36 +390,36 @@ Es gilt: $\log(n) < \sqrt{n} < n < n\cdot \log(n) < n^2 < n! < 2^n<n^n$
 \end{idea}
 \paragraph{Code}\mbox{}
 %\begin{noindent}
-\begin{codeBlock}[autogobble]{title=Insertion-Sort(A)}
-    FOR j = 1 TO A.length - 1
-      key = A[j]
-      // Füge A[j] in die sortierte Sequenz A[0...j-1] ein
-      i = j - 1
-      WHILE i >= 0 and A[i] > key
-          A[i + 1] = A[i]
-          i = i - 1
-      A[i + 1] = key
+\begin{codeBlock}[autogobble]{title=insertionSort(A)}
+    FOR i=1 TO A.length-1 DO
+        // insert A[i] in pre-sorted sequence A[0..i-1]
+        key=A[i];
+        j=i-1; // search for insertion point backwards
+        WHILE j>=0 AND A[j]>key DO
+            A[j+1]=A[j]; // move elements to right
+            j=j-1;
+        A[j+1]=key;
 \end{codeBlock}
 %\end{noindent}
 
 \paragraph{Schleifeninvariante von \texttt{Insertion Sort}}\label{insSortSiv}
 \begin{itemize}
-    \item Zu Beginn jeder Iteration der \texttt{for}-Schleife besteht die Teilfolge \texttt{A[0...j-1]} aus den Elementen \\
-          der ursprünglichen Teilfolge \texttt{A[0...j-1]} enthaltenen Elementen, allerdings in sortierter Reihenfolge.
+    \item Zu Beginn jeder Iteration der \texttt{for}-Schleife besteht die Teilfolge \texttt{A[0...i-1]} aus den Elementen \\
+          der ursprünglichen Teilfolge \texttt{A[0...i-1]} enthaltenen Elementen, allerdings in sortierter Reihenfolge.
 \end{itemize}
 
 \paragraph{Korrektheit von \texttt{Insertion Sort}}
 \begin{description}[leftmargin=3cm,itemsep=1em]
     \item [Initialisierung]
-          Beginn mit \texttt{j=1}, also Teilfeld \texttt{A[0...j-1]} besteht nur aus einem Element \texttt{A[0]}. \\
+          Beginn mit \texttt{i=1}, also Teilfeld \texttt{A[0...i-1]} besteht nur aus einem Element \texttt{A[0]}. \\
           Dies ist auch das ursprüngliche Element und Teilfeld ist sortiert.
     \item [Fortsetzung]
           Zu zeigen ist, dass die Invariante bei jeder Iteration erhalten bleibt. Ausführungsblock der \texttt{for}-Schleife
-          sorgt dafür, dass \texttt{A[j-1], A[j-2]},... je um Stelle nach rechts geschoben werden bis \texttt{A[j]} korrekt eingefügt wurde.
-          Teilfeld \texttt{A[0...j]} besteht aus ursprünglichen Elementen und ist sortiert. Inkrementieren von j erhält die Invariante.
+          sorgt dafür, dass \texttt{A[i-1], A[i-2]},... je um Stelle nach rechts geschoben werden bis \texttt{A[i]} korrekt eingefügt wurde.
+          Teilfeld \texttt{A[0...i]} besteht aus ursprünglichen Elementen und ist sortiert. Inkrementieren von i erhält die Invariante.
     \item [Terminierung]
-          Abbruchbedingung der \texttt{for}-Schleife, wenn \texttt{j > A.length - 1}. Jede Iteration erhöht j.
-          Dann bei Abbruch ist \texttt{j = n } und einsetzen in Invariante liefert das Teilfeld \texttt{A[0...n-1]}
+          Abbruchbedingung der \texttt{for}-Schleife, wenn \texttt{i > A.length - 1}. Jede Iteration erhöht i.
+          Dann bei Abbruch ist \texttt{i = n} und einsetzen in Invariante liefert das Teilfeld \texttt{A[0...n-1]}
           welches aus den ursprünglichen Elementen besteht und sortiert ist. Teilfeld ist gesamtes Feld.
 \end{description}
 $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
@@ -457,9 +457,9 @@ $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
         \item Jede Zeile wird $x$ mal durchgeführt
         \item $Laufzeit = Anzahl * Kosten$ jeder Zeile
         \item Schleifen: Abbruchüberprüfung zählt auch
-        \item \texttt{$t_j$}: Anzahl der Abfragen der \texttt{While}-Schleife
+        \item \texttt{$t_i$}: Anzahl der Abfragen der \texttt{While}-Schleife
         \item Laufzeit:
-              $T(n)=c_{1} n+c_{2}(n-1)+c_{4}(n-1)+c_{5} \sum_{j=1}^{n-1} t_{j}\\ +c_{6} \sum_{j=1}^{n-1}\left(t_{j}-1\right)+c_{7} \sum_{j=1}^{n-1}\left(t_{j}-1\right)+c_{8}(n-1)$
+              $T(n)=c_{1} n+c_{2}(n-1)+c_{4}(n-1)+c_{5} \sum_{i=1}^{n-1} t_{i}\\ +c_{6} \sum_{i=1}^{n-1}\left(t_{i}-1\right)+c_{7} \sum_{i=1}^{n-1}\left(t_{i}-1\right)+c_{8}(n-1)$
     \end{itemize}
 \end{minipage}
 % \vspace{1em}
@@ -470,22 +470,22 @@ $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
               \item Quasi die Überprüfung, durch die die Schleife abbricht
           \end{itemize}
 
-    \item [Warum $\sum^{n-1}_{j=1}$ in Zeile 5?]
+    \item [Warum $\sum^{n-1}_{i=1}$ in Zeile 5?]
           \begin{itemize}
-              \item Aufsummierung aller einzelnen $t_j$ über die Anzahl der Schleifendurchläufe
+              \item Aufsummierung aller einzelnen $t_i$ über die Anzahl der Schleifendurchläufe
               \item Diese ist allerdings $n-1$ und nicht $n$, da die Abbruchüberprüfung dort auch enthalten ist
           \end{itemize}
 
-    \item [Warum $t_j-1$ in Zeile 6?]
+    \item [Warum $t_i-1$ in Zeile 6?]
           \begin{itemize}
-              \item Selbes Argument wie oben, bei $t_j$ ist die Abbruchüberprüfung enthalten
-              \item Deswegen wird die \texttt{while}-Schleife nur $t_j-1$-mal ausgeführt
+              \item Selbes Argument wie oben, bei $t_i$ ist die Abbruchüberprüfung enthalten
+              \item Deswegen wird die \texttt{while}-Schleife nur $t_i-1$-mal ausgeführt
           \end{itemize}
 
     \item [\texttt{Best Case}]
           \begin{itemize}
               \item zu sortierendes Feld ist bereits sortiert
-              \item $t_j$ wird dadurch zu 1, da die \texttt{While}-Schleife immer nur einmal prüft (Abbruch)
+              \item $t_i$ wird dadurch zu 1, da die \texttt{While}-Schleife immer nur einmal prüft (Abbruch)
               \item Die zwei Zeilen innerhalb der \texttt{While}-Schleife werden nie ausgeführt
               \item Durch Umformen ergibt sich, dass die Laufzeit eine lineare Funktion in $n$ ist
           \end{itemize}
@@ -493,14 +493,14 @@ $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
     \item [\texttt{Worst Case}]
           \begin{itemize}
               \item zu sortierendes Feld ist umgekehrt sortiert
-              \item $t_j$ wird dadurch zu $j+1$, da die \texttt{While}-Schleife immer die gesamte Länge prüft
+              \item $t_i$ wird dadurch zu $i+1$, da die \texttt{While}-Schleife immer die gesamte Länge prüft
               \item Durch Umformen ergibt sich, dass die Laufzeit eine quadratische Funktion in $n$ ist ($n^2$)
           \end{itemize}
 
     \item [\texttt{Average Case}]
           \begin{itemize}
               \item im Mittel gut gemischt
-              \item $t_j$ wird dadurch zu $j/2$
+              \item $t_i$ wird dadurch zu $i/2$
               \item Die Laufzeit bleibt aber eine quadratische Funktion in $n$ ($n^2$)
           \end{itemize}
 \end{description}
@@ -562,17 +562,17 @@ $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
 \begin{idea}[Bubble Sort]\mbox{}
     \begin{itemize}
         \item Vergleiche Paare von benachbarten Schlüsselwerten
-        \item Tausche das Paar, falls rechter Schlüsselwert kleiner als linker
+        \item Tausche das Paar, falls linker Schlüsselwert größer als rechter
     \end{itemize}
 \end{idea}
 
 \paragraph{Code}\mbox{}
 %\begin{noindent}
-\begin{codeBlock}[autogobble]{title=BubbleSort(A)}
-    FOR i = 0 TO A.length - 2
-        FOR j = A.length - 1 DOWNTO i + 1
-            IF A[j] < A[j-1]
-                SWAP(A[j], A[j-1])
+\begin{codeBlock}[autogobble]{title=bubbleSort(A)}
+    FOR i = A.length-1 DOWNTO 0 DO
+        FOR j = 0 TO i-1 DO
+            IF A[j] > A[j+1] THEN
+                SWAP(A[j], A[j+1])
 \end{codeBlock}
 %\end{noindent}
 
@@ -656,33 +656,26 @@ $\Longrightarrow$ Algorithmus \texttt{Insertion Sort} arbeitet damit korrekt.
 \end{idea}
 \paragraph{Code}\mbox{}
 %\begin{noindent}
-\begin{codeBlock}[autogobble,escapeinside=||]{title={MERGE-SORT(A,p,r)}}
-    IF p < r
-      q = |$\left \lfloor \texttt{(p+r)/2} \right \rfloor$|        // Teilen in 2 Teilfolgen
-      MERGE-SORT(A,p,q)   // Sortieren der beiden Teilfolgen
-      MERGE-SORT(A,q+1,r)
-      MERGE(A,p,q,r)      // Vereinigung der beiden sortierten Teilfolgen
+\begin{codeBlock}[autogobble,escapeinside=||]{title={mergeSort(A,left,right) // initial left=0,right=A.length-1}}
+    IF left < right THEN // more than one element
+        mid=floor((left+right)/2); // middle (rounded down)
+        mergeSort(A,left,mid); // sort left part
+        mergeSort(A,mid+1,right); // sort right part
+        merge(A,left,mid,right); // merge into one
 \end{codeBlock}
 
-\begin{codeBlock}[autogobble,escapeinside=||]{title={MERGE(A,p,q,r)}}
-    |$n_1$| = q - p + 1
-    |$n_2$| = r - q
-    Let L[0...|$n_1$|] and R[0...|$n_2$|] be new arrays
-    FOR i = 0 TO |$n_1$| - 1 // Auffüllen der neu erstellten Arrays
-      L[i] = A[p + i]
-    FOR j = 0 TO |$n_2$| - 1
-      R[j] = A[q + j + 1]
-    L[|$n_1$|] = |$\infty$| // Einfügen des Sentinel-Wertes
-    R[|$n_2$|] = |$\infty$|
-    i = 0
-    j = 0
-    FOR k = p TO r  // Eintragweiser Vergleich der Elemente
-      IF L[i] |$\leq$| R[j]
-          A[k] = L[i] // Sortiertes Zurückschreiben in Original-Array
-          i = i + 1
-      ELSE
-          A[k] = R[j]
-          j = j + 1
+\begin{codeBlock}[autogobble,escapeinside=||]{title={merge(A,left,mid,right)}}
+        //temporary array B, right-left+1 elements
+    
+    p=left; q=mid+1; // position left, right
+    FOR i=0 TO right-left DO // merge all elements
+        IF q>right OR (p=<mid AND A[p]=<A[q]) THEN
+            B[i]=A[p];
+            p=p+1;
+        ELSE //next element at q
+            B[i]=A[q];
+            q=q+1;
+    FOR i=0 TO right-left DO A[i+left]=B[i]; //copy back
 \end{codeBlock}
 %\end{noindent}
 (Teilarrays werden nicht parallel bearbeitet)
@@ -772,21 +765,20 @@ Lösen der Rekursionsgleichung mithilfe eines Rekursionsbaums
 
 \paragraph{Code}\mbox{}
 %\begin{noindent}
-          \begin{codeBlock}[autogobble,escapeinside=||]{title={QUICKSORT(A,p,r)}}
-              IF p < r    // Überprüfung, ob Teilarray leer ist
-                q = PARTITION(A,p,r)
-                QUICKSORT(A,p,q-1)
-                QUICKSORT(A,q+1,r)
+          \begin{codeBlock}[autogobble,escapeinside=||]{title={quicksort(A,left,right)} //initial left=0,right=A.length-1}
+            IF left<right THEN //more than one element
+                q=partition(A,left,right); // q partition index
+                quicksort(A,left,q); // sort left part
+                quicksort(A,q+1,right); // sort right part
           \end{codeBlock}
-          \index{Partition}\begin{codeBlock}[autogobble,escapeinside=||]{title={PARTITION(A,p,r)}}
-              x = A[r]    // Wahl des Pivotelements
-              i = p - 1   // Index i setzen
-              FOR j = p TO r - 1 // Auffüllen des Teilarrays mit Elementen
-                IF A[j] |$\leq$| x
-                    i = i + 1
-                    SWAP(A[i], A[j])
-              SWAP(A[i+1], A[r]) // Tausch des Pivotelements
-              RETURN i + 1 // Neuer Index des Pivotelements
+          \index{Partition}\begin{codeBlock}[autogobble,escapeinside=||]{title={partition(A,left,right)}  //req.left<right,ret.left..right-1}
+            pivot=A[left];
+            p=left-1; q=right+1; //move from left resp. right
+            WHILE p<q DO
+                REPEAT p=p+1 UNTIL A[p]>=pivot; //left up
+                REPEAT q=q-1 UNTIL A[q]=<pivot; //right down
+                IF p<q THEN Swap(A[p],A[q]);
+            return q // A[left..q], A[q+1..right]
           \end{codeBlock}
           %\end{noindent}
 (Teilarrays werden nicht parallel bearbeitet)
